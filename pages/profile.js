@@ -12,6 +12,7 @@ export default function Profile() {
 
   useEffect(() => {
     getUserProfile().then((profileData) => {
+      console.log('profile data:', profileData)
       if (profileData) {
         setProfile(profileData)
       }
@@ -20,6 +21,10 @@ export default function Profile() {
 
   return (
     <>
+      <h1 className="title is-3 has-text-weight-semibold has-text-centered mb-5">
+      Hello, {profile.user.first_name} {profile.user.last_name}!
+      </h1>
+
       <CardLayout title="Favorite Stores" width="is-full">
         <div className="columns is-multiline">
           {
