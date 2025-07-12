@@ -20,10 +20,11 @@ export function register(user) {
   })
 }
 
-export function getUserProfile() {
+export function getUserProfile(responseToken) {
+  const token = responseToken || localStorage.getItem('token')
   return fetchWithResponse('profile', {
     headers: {
-      Authorization: `Token ${localStorage.getItem('token')}`,
+      Authorization: `Token ${token}`,
     }
   })
 }

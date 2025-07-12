@@ -5,10 +5,10 @@ import { Input } from '../components/form-elements'
 import Layout from '../components/layout'
 import Navbar from '../components/navbar'
 import { useAppContext } from '../context/state'
-import { login } from '../data/auth'
+import { getUserProfile, login } from '../data/auth'
 
 export default function Login() {
-  const {setToken} = useAppContext()
+  const {setToken, setProfile} = useAppContext()
   const username = useRef('')
   const password = useRef('')
   const router = useRouter()
@@ -22,8 +22,14 @@ export default function Login() {
 
     login(user).then((res) => {
       if (res.token) {
-        setToken(res.token)
-        router.push('/')
+        const responseToken = res.token
+        setToken(responseToken)
+        getUserProfile(responseToken).then((profileData) => {
+          if (profileData) {
+            setProfile(profileData)
+            router.push('/')
+          }
+        })
       }
     })
   }

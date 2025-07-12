@@ -5,10 +5,10 @@ import { Input } from '../components/form-elements'
 import Layout from '../components/layout'
 import Navbar from '../components/navbar'
 import { useAppContext } from '../context/state'
-import { register } from '../data/auth'
+import { getUserProfile, register } from '../data/auth'
 
 export default function Register() {
-  const {setToken} = useAppContext()
+  const {setToken, setProfile} = useAppContext()
 
   const firstName = useRef('')
   const lastName = useRef('')
@@ -28,8 +28,14 @@ export default function Register() {
 
     register(user).then((res) => {
       if (res.token) {
-        setToken(res.token)
-        router.push('/')
+        const responseToken = res.token
+        setToken(responseToken)
+        getUserProfile(responseToken).then((profileData) => {
+          if (profileData) {
+            setProfile(profileData)
+            router.push('/')
+          }
+        })
       }
     })
   }

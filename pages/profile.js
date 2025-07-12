@@ -22,13 +22,13 @@ export default function Profile() {
   return (
     <>
       <h1 className="title is-3 has-text-weight-semibold has-text-centered mb-5">
-      Hello, {profile.user.first_name} {profile.user.last_name}!
+      Hello, {profile?.user?.first_name} {profile?.user?.last_name}!
       </h1>
 
       <CardLayout title="Favorite Stores" width="is-full">
         <div className="columns is-multiline">
           {
-            profile.favorites?.map(favorite => (
+            profile?.favorites?.map(favorite => (
               <StoreCard store={favorite} key={favorite.id} width="is-one-third" />
             ))
           }
@@ -38,7 +38,7 @@ export default function Profile() {
       <CardLayout title="Products you've recommended" width="is-full">
         <div className="columns is-multiline">
           {
-            profile.recommended_by?.map(recommendation => (
+            profile?.recommended_by?.map(recommendation => (
               <ProductCard product={recommendation.product} key={recommendation.product.id} width="is-one-third" />
             ))
           }
@@ -48,7 +48,7 @@ export default function Profile() {
       <CardLayout title="Products recommended to you" width="is-full">
         <div className="columns is-multiline">
           {
-            profile.recommendations?.map(recommendation => (
+            profile?.recommendations?.map(recommendation => (
               <ProductCard product={recommendation.product} key={recommendation.product.id} width="is-one-third" />
             ))
           }
@@ -59,7 +59,7 @@ export default function Profile() {
       <CardLayout title="Products you've liked" width="is-full">
         <div className="columns is-multiline">
           {
-            profile.likes?.map(product => (
+            profile?.likes?.map(product => (
               <ProductCard product={product} key={product.id} width="is-one-third" />
             ))
           }
