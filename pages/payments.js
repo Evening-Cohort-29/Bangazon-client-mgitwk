@@ -6,20 +6,33 @@ import Navbar from '../components/navbar'
 import AddPaymentModal from '../components/payments/payment-modal'
 import Table from '../components/table'
 import { addPaymentType, getPaymentTypes, deletePaymentType } from '../data/payment-types'
+import { useAppContext } from '../context/state'
+import { getUserProfile } from '../data/auth'
 
 export default function Payments() {
-  const headers = ['Merchant Name', 'Card Number', '']
-  const [payments, setPayments] = useState([])
+  const {profile, setProfile} = useAppContext()
+
+  const headers = ['Merchant Name', 'Expiration Date', '']
+  // const [payments, setPayments] = useState([])
   const [showModal, setShowModal] = useState(false)
-  const refresh = () => getPaymentTypes().then((data) => {
-    if (data) {
-      setPayments(data)
-    }
-  })
+  // const refresh = () => getPaymentTypes().then((data) => {
+  //   if (data) {
+  //     setPayments(data)
+  //   }
+  // })
 
   useEffect(() => {
-    refresh()
+    getUserProfile().then((profileData) => {
+      console.log('profile data:', profileData)
+      if (profileData) {
+        setProfile(profileData)
+      }
+    })
   }, [])
+
+  // useEffect(() => {
+  //     refresh()
+  // }, [])
 
   const addNewPayment = (payment) => {
     addPaymentType(payment).then(() => {
@@ -36,14 +49,17 @@ export default function Payments() {
 
   return (
     <>
+      {profile?.payment_types?.[0] ?
+      <> 
       <AddPaymentModal showModal={showModal} setShowModal={setShowModal} addNewPayment={addNewPayment} />
       <CardLayout title="Your Payment Methods">
         <Table headers={headers}>
           {
-            payments.map(payment => (
-              <tr key={payment.id}>
-                <td>{payment.merchant_name}</td>
-                <td>{payment.obscured_num}</td>
+            profile?.payment_types?.map(payment => (
+              
+              <tr key={payment?.id}>
+                <td>{payment?.merchant_name}</td>
+                <td>{payment?.expiration_date}</td>
                 <td>
                   <span className="icon is-clickable" onClick={() => removePayment(payment.id)}>
                     <i className="fas fa-trash"></i>
@@ -57,6 +73,12 @@ export default function Payments() {
           <a className="card-footer-item" onClick={() => setShowModal(true)}>Add new Payment Method</a>
         </>
       </CardLayout>
+      </> 
+      :
+      <>
+      <a className="card-footer-item" onClick={() => setShowModal(true)}>Add new Payment Method</a>
+      </> 
+      }
     </>
   )
 }
