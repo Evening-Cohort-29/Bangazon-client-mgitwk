@@ -113,12 +113,17 @@ export default function Products() {
 })}
 
       {isFiltered && (
-        <div className="columns is-multiline">
-          {products.map((product) => (
-            <ProductCard product={product} key={product.id} />
-          ))}
-        </div>
-      )}
+  <>
+    <h1 style={{ fontSize: "48px", fontWeight: "bold", marginBottom: "20px" }}>
+      Products matching filters
+    </h1>
+    <div className="columns is-multiline">
+      {products.map((product) => (
+        <ProductCard product={product} key={product.id} />
+      ))}
+    </div>
+  </>
+)}
     </>
   );
 }
