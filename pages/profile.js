@@ -12,7 +12,6 @@ export default function Profile() {
 
   useEffect(() => {
     getUserProfile().then((profileData) => {
-      console.log('profile data:', profileData)
       if (profileData) {
         setProfile(profileData)
       }

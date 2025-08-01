@@ -23,7 +23,6 @@ export default function Payments() {
 
   useEffect(() => {
     getUserProfile().then((profileData) => {
-      console.log('profile data:', profileData)
       if (profileData) {
         setProfile(profileData)
       }
@@ -50,13 +49,13 @@ export default function Payments() {
   return (
     <>
       {profile?.payment_types?.[0] ?
-      <> 
+      <>
       <AddPaymentModal showModal={showModal} setShowModal={setShowModal} addNewPayment={addNewPayment} />
       <CardLayout title="Your Payment Methods">
         <Table headers={headers}>
           {
             profile?.payment_types?.map(payment => (
-              
+
               <tr key={payment?.id}>
                 <td>{payment?.merchant_name}</td>
                 <td>{payment?.expiration_date}</td>
@@ -73,11 +72,11 @@ export default function Payments() {
           <a className="card-footer-item" onClick={() => setShowModal(true)}>Add new Payment Method</a>
         </>
       </CardLayout>
-      </> 
+      </>
       :
       <>
       <a className="card-footer-item" onClick={() => setShowModal(true)}>Add new Payment Method</a>
-      </> 
+      </>
       }
     </>
   )
