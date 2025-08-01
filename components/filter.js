@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { getCategories } from '../data/products'
 import { Input, Select } from './form-elements'
 
-export default function Filter({ productCount, onSearch, locations }) {
+export default function Filter({ productCount, onSearch, onReset, locations }) {
   const refEls = {
     location: useRef(),
     category: useRef(),
@@ -15,7 +15,7 @@ export default function Filter({ productCount, onSearch, locations }) {
 
   const [showFilters, setShowFilters] = useState(false)
   const [query, setQuery] = useState('')
-  const [categories, setCategories] = useState([{id: 1, name: 'Apples'}, {id: 2, name: 'Oranges'}, {id: 3, name: 'Lemons'}])
+  const [categories, setCategories] = useState([])
   const [direction, setDirection] = useState('asc')
   const clear = () => {
     for (let ref in refEls) {
@@ -29,7 +29,12 @@ export default function Filter({ productCount, onSearch, locations }) {
         refEls[ref].current.value = 0
       }
     }
-    onSearch('')
+    setQuery('');
+    if (onReset) {
+      onReset();
+    } else {
+      onSearch('');
+    }
   }
   const orderByOptions = [
     {
@@ -58,6 +63,14 @@ export default function Filter({ productCount, onSearch, locations }) {
       onSearch(query)
     }
   }, [query])
+
+  useEffect(() => {
+    getCategories().then(categoryData => {
+      if (categoryData) {
+        setCategories(categoryData)
+      }
+    })
+  }, [])
 
   const buildQuery = (key, value) => {
     if (value && value !== "0") {
@@ -184,7 +197,7 @@ export default function Filter({ productCount, onSearch, locations }) {
                 <div className="dropdown-item">
                   <div className="field is-grouped">
                     <p className="control">
-                      <button className="button is-primary" onClick={filter}>
+                      <button className="button is-primary" onClick={() => { filter(); setShowFilters(false); }}>
                         Filter
                       </button>
                     </p>
